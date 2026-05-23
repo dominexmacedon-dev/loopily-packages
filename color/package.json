@@ -1,8 +1,0 @@
-{
-  "name": "color",
-  "version": "1.0.0",
-  "description": "Loopily color utilities package",
-  "main": "color.js",
-  "author": "loopily-packages",
-  "license": "MIT"
-}
