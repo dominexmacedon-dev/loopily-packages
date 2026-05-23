@@ -1,0 +1,8 @@
+{
+  "name": "math",
+  "version": "1.0.0",
+  "main": "math.js",
+  "description": "Core math utilities for Loopily language",
+  "author": "Loopily Packages",
+  "license": "MIT"
+}
