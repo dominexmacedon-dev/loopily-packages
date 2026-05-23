@@ -1,67 +1,48 @@
 // Loopily Color Package
-// Basic color utilities for strings and RGB manipulation
+// Simple ANSI terminal color support
 
-function clamp(v, min, max) {
-  return Math.max(min, Math.min(max, v))
+const reset = "\x1b[0m"
+
+function wrap(code) {
+  return (text) => `${code}${text}${reset}`
 }
 
-function toRGB(r, g, b) {
-  r = clamp(Number(r) || 0, 0, 255)
-  g = clamp(Number(g) || 0, 0, 255)
-  b = clamp(Number(b) || 0, 0, 255)
-  return { r, g, b }
+const color = {
+
+  // text colors
+  red: wrap("\x1b[31m"),
+  green: wrap("\x1b[32m"),
+  yellow: wrap("\x1b[33m"),
+  blue: wrap("\x1b[34m"),
+  magenta: wrap("\x1b[35m"),
+  cyan: wrap("\x1b[36m"),
+  white: wrap("\x1b[37m"),
+  gray: wrap("\x1b[90m"),
+
+  // bright colors
+  brightRed: wrap("\x1b[91m"),
+  brightGreen: wrap("\x1b[92m"),
+  brightYellow: wrap("\x1b[93m"),
+  brightBlue: wrap("\x1b[94m"),
+
+  // styles
+  bold: wrap("\x1b[1m"),
+  dim: wrap("\x1b[2m"),
+  italic: wrap("\x1b[3m"),
+  underline: wrap("\x1b[4m"),
+
+  // background colors
+  bgRed: wrap("\x1b[41m"),
+  bgGreen: wrap("\x1b[42m"),
+  bgYellow: wrap("\x1b[43m"),
+  bgBlue: wrap("\x1b[44m"),
+  bgMagenta: wrap("\x1b[45m"),
+  bgCyan: wrap("\x1b[46m"),
+
+  // reset helper
+  reset(text) {
+    return `${text}${reset}`
+  }
 }
 
-function toHex(r, g, b) {
-  const rgb = toRGB(r, g, b)
-  return (
-    "#" +
-    [rgb.r, rgb.g, rgb.b]
-      .map(x => x.toString(16).padStart(2, "0"))
-      .join("")
-  )
-}
-
-function fromHex(hex) {
-  if (typeof hex !== "string") throw new Error("Invalid hex color")
-
-  hex = hex.replace("#", "")
-
-  if (hex.length !== 6) throw new Error("Hex must be 6 characters")
-
-  const r = parseInt(hex.slice(0, 2), 16)
-  const g = parseInt(hex.slice(2, 4), 16)
-  const b = parseInt(hex.slice(4, 6), 16)
-
-  return { r, g, b }
-}
-
-function lighten(hex, amount = 20) {
-  const { r, g, b } = fromHex(hex)
-  return toHex(r + amount, g + amount, b + amount)
-}
-
-function darken(hex, amount = 20) {
-  const { r, g, b } = fromHex(hex)
-  return toHex(r - amount, g - amount, b - amount)
-}
-
-function mix(hex1, hex2, ratio = 0.5) {
-  const c1 = fromHex(hex1)
-  const c2 = fromHex(hex2)
-
-  const r = c1.r + (c2.r - c1.r) * ratio
-  const g = c1.g + (c2.g - c1.g) * ratio
-  const b = c1.b + (c2.b - c1.b) * ratio
-
-  return toHex(r, g, b)
-}
-
-module.exports = {
-  toRGB,
-  toHex,
-  fromHex,
-  lighten,
-  darken,
-  mix
-}
+module.exports = color
